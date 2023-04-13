@@ -8,7 +8,6 @@
 extern "C" {
 #endif
 
-void StartLvglThread();
 void LvglLock();
 void LvglUnlock();
 

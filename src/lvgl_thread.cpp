@@ -67,8 +67,3 @@ void LvglThreadEntry(void *argument)
         vTaskDelayUntil(&PreviousWakeTime, 5);
     }
 }
-
-void StartLvglThread()
-{
-    xTaskCreate(LvglThreadEntry, "lvgl_thread", 2048, nullptr, 3, nullptr);
-}
