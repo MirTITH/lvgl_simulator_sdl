@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
         // LvglLock();
         // lv_timer_handler();
         // LvglUnlock();
-        usleep(5 * 1000);
+        usleep(1000 * 1000);
     }
 
     return 0;

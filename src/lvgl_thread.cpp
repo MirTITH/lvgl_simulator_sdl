@@ -69,16 +69,14 @@ void LvglThreadEntry(void *argument)
     lv_textarea_add_text(background_text, "This is the background text!");
     LvglUnlock();
 
-    // TickType_t PreviousWakeTime = xTaskGetTickCount();
+    TickType_t PreviousWakeTime = xTaskGetTickCount();
 
     for (;;) {
         LvglLock();
         lv_timer_handler();
         LvglUnlock();
 
-        vTaskDelay(5);
-
         // 拖动窗口时会暂停程序，但时间仍在流逝，于是用下面这行会卡住
-        // vTaskDelayUntil(&PreviousWakeTime, 5);
+        vTaskDelayUntil(&PreviousWakeTime, 5);
     }
 }
