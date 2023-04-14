@@ -70,7 +70,7 @@ extern void LvglThreadEntry(void *argument);
 
 using namespace std;
 
-int SDL_main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     (void)argc; /*Unused*/
     (void)argv; /*Unused*/

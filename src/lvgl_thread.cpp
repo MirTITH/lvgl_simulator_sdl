@@ -1,6 +1,5 @@
 #include "lvgl_thread.h"
 #include "lvgl.h"
-#include <thread>
 #include <mutex>
 #include "FreeRTOS.h"
 #include "lvgl_app.hpp"
@@ -24,6 +23,7 @@ void LvglUnlock()
 static void LvglAppRunnerEntry(void *argument)
 {
     auto app = (LvglApp *)argument;
+    LvglLock();
     switch (app->app_type) {
     case LvglAppType::Window:
         app->app_screen = lv_obj_create(lv_scr_act());
@@ -39,6 +39,8 @@ static void LvglAppRunnerEntry(void *argument)
     default:
         break;
     }
+    LvglUnlock();
+
     app->Run();
     vTaskDelete(nullptr);
 }
@@ -57,13 +59,16 @@ void LvglThreadEntry(void *argument)
     lv_textarea_add_text(background_text, "This is the background text!");
     LvglUnlock();
 
-    uint32_t PreviousWakeTime = xTaskGetTickCount();
+    // uint32_t PreviousWakeTime = xTaskGetTickCount();
 
     for (;;) {
         LvglLock();
         lv_timer_handler();
         LvglUnlock();
 
-        vTaskDelayUntil(&PreviousWakeTime, 5);
+        vTaskDelay(5);
+
+        // 拖动窗口时会暂停程序，但时间仍在流逝，于是用下面这行会卡住
+        // vTaskDelayUntil(&PreviousWakeTime, 5);
     }
 }

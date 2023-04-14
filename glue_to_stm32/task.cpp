@@ -2,7 +2,6 @@
 #include "get_tick.h"
 #include <chrono>
 #include <SDL2/SDL_thread.h>
-// #include <thread>
 #include <unistd.h>
 
 using namespace std;
@@ -39,7 +38,7 @@ TickType_t xTaskGetTickCount(void)
 
 void vTaskDelayUntil(TickType_t *const pxPreviousWakeTime, const TickType_t xTimeIncrement)
 {
-    int64_t delta_time = *pxPreviousWakeTime + xTimeIncrement - GetTickMs();
+    auto delta_time = (int64_t)*pxPreviousWakeTime + xTimeIncrement - GetTickMs();
     if (delta_time > 0) {
         usleep(delta_time * 1000);
     }
@@ -49,5 +48,4 @@ void vTaskDelayUntil(TickType_t *const pxPreviousWakeTime, const TickType_t xTim
 void vTaskDelay(const TickType_t xTicksToDelay)
 {
     usleep(xTicksToDelay * 1000);
-    // this_thread::sleep_for(chrono::milliseconds(xTicksToDelay));
 }
