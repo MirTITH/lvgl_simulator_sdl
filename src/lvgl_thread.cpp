@@ -1,6 +1,5 @@
 #include "lvgl_thread.h"
 #include "lvgl.h"
-#include <thread>
 #include <mutex>
 #include "FreeRTOS.h"
 #include "lvgl_app.hpp"
@@ -78,5 +77,8 @@ void LvglThreadEntry(void *argument)
         LvglUnlock();
 
         vTaskDelay(5);
+
+        // 拖动窗口时会暂停程序，但时间仍在流逝，于是用下面这行会卡住
+        // vTaskDelayUntil(&PreviousWakeTime, 5);
     }
 }
