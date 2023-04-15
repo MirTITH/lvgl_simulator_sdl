@@ -41,6 +41,8 @@ typedef struct QueueDefinition *QueueSetMemberHandle_t;
 #define queueQUEUE_TYPE_BINARY_SEMAPHORE   ((uint8_t)3U)
 #define queueQUEUE_TYPE_RECURSIVE_MUTEX    ((uint8_t)4U)
 
+void vQueueDelete(QueueHandle_t xQueue);
+
 #ifdef __cplusplus
 }
 #endif

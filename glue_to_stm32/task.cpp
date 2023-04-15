@@ -3,6 +3,7 @@
 #include <chrono>
 #include <SDL2/SDL_thread.h>
 #include <unistd.h>
+#include <iostream>
 
 using namespace std;
 
@@ -17,8 +18,12 @@ static int SDL_ThreadGlueEntry(void *data)
     return 0;
 }
 
-void vTaskDelete(void *)
+void vTaskDelete(TaskHandle_t xTaskToDelete)
 {
+    cout << "Note: Called vTaskDelete(). However, this function is not implemented." << endl;
+    if (xTaskToDelete != nullptr) {
+        throw std::runtime_error("vTaskDelete() is not implemented. Anyway, it is not recommended to terminate other thread.");
+    }
 }
 
 int xTaskCreate(TaskFunction_t pxTaskCode, const char *const pcName, const configSTACK_DEPTH_TYPE usStackDepth, void *const pvParameters, UBaseType_t uxPriority, TaskHandle_t *const pxCreatedTask)

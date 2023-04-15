@@ -2,6 +2,7 @@
 
 #include "stdint.h"
 #include "portmacro.h"
+#include "projdefs.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,7 +13,7 @@ typedef void (*TaskFunction_t)(void *);
 typedef void *TaskHandle_t;
 typedef unsigned long UBaseType_t;
 
-void vTaskDelete(void *);
+void vTaskDelete(TaskHandle_t xTaskToDelete);
 
 int xTaskCreate(TaskFunction_t pxTaskCode,
                 const char *const pcName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */

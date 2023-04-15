@@ -111,9 +111,6 @@ int main(int argc, char *argv[])
     while (1) {
         /* Periodically call the lv_task handler.
          * It could be done in a timer interrupt or an OS task too.*/
-        // LvglLock();
-        // lv_timer_handler();
-        // LvglUnlock();
         usleep(1000 * 1000);
     }
 
