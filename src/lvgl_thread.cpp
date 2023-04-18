@@ -3,7 +3,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "lvgl_app.hpp"
-#include "app_dashboard.hpp"
+#include "app/app_dashboard.hpp"
 #include "lvgl/demos/lv_demos.h"
 #include <chrono>
 
@@ -23,12 +23,11 @@ void LvglUnlock()
     xSemaphoreGiveRecursive(LvglMutex);
 }
 
-static void LvglAppRunnerEntry(void *argument)
+static void InitLvglApp(LvglApp *app)
 {
-    auto app            = (LvglApp *)argument;
     lv_obj_t *main_page = nullptr;
     LvglLock();
-    switch (app->GetAppProperty().type) {
+    switch (app->App().type) {
     case LvglApp::Type::Normal:
         main_page = lv_obj_create(lv_scr_act());
         lv_obj_add_style(main_page, &PAGE_STYLE, 0);
@@ -44,10 +43,17 @@ static void LvglAppRunnerEntry(void *argument)
     default:
         break;
     }
-
-    LvglUnlock();
     app->SetAppMainPage(main_page);
+    app->Init();
+    LvglUnlock();
+}
+
+static void LvglAppRunnerEntry(void *argument)
+{
+    auto app = (LvglApp *)argument;
+
     app->Run();
+
     vTaskDelete(nullptr);
 }
 
@@ -67,16 +73,21 @@ void LvglThreadEntry(void *argument)
     lv_style_set_radius(&PAGE_STYLE, 0);
     lv_style_set_align(&PAGE_STYLE, LV_ALIGN_BOTTOM_MID);
 
-    LvglApp *app1 = new AppDashboard();
-
-    auto app_property = app1->GetAppProperty();
-
-    xTaskCreate(LvglAppRunnerEntry, app_property.name.c_str(), app1->GetStackDepth(), app1, app1->GetPriority(), nullptr);
+    AppDashboard *app1 = new AppDashboard();
+    InitLvglApp(app1);
+    app1->NewDashboard(2);
+    app1->NewDashboard(3);
+    app1->NewDashboard(4);
+    xTaskCreate(LvglAppRunnerEntry, app1->App().name.c_str(), app1->GetStackDepth(), app1, app1->GetPriority(), nullptr);
 
     TickType_t PreviousWakeTime = xTaskGetTickCount();
 
+    double value = 1.52314553;
+
     for (;;) {
         LvglLock();
+        app1->Id(3)->SetMessage(value++);
+        app1->Id(4)->SetMessage(2*value++);
         lv_timer_handler();
         LvglUnlock();
 

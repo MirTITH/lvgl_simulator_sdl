@@ -4,6 +4,7 @@
 #include "lvgl.h"
 #include "FreeRTOS.h"
 #include "semphr.h"
+#include "lvgl_app_global_types.hpp"
 
 class LvglApp
 {
@@ -94,6 +95,11 @@ public:
         return 0;
     }
 
+    virtual int Init()
+    {
+        return 0;
+    }
+
     LvglApp(std::string app_name = "Untitled",
             Type app_type        = Type::Normal,
             void *argument       = nullptr,
@@ -119,7 +125,7 @@ public:
         return _priority;
     }
 
-    AppProperty GetAppProperty()
+    AppProperty App()
     {
         MutexLock();
         auto result = app;
